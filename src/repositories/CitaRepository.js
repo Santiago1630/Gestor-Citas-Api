@@ -16,7 +16,6 @@ const citaRepository = {
 
         cita.estado = "Pendiente";
 
-        // Mapeo exacto de las columnas de la tabla 'citas' de tu pgAdmin
         const sql = `INSERT INTO citas(nombre_cliente, telefono, tipo_servicio, estado, fecha, hora, id_negocio) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
         const params = [cita.nombreCliente, cita.telefono, cita.tipoServicio, cita.estado, cita.fecha, cita.hora, cita.idNegocio];
         await db.query(sql, params);

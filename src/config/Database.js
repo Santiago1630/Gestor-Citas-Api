@@ -1,16 +1,37 @@
-const { Pool } = require('pg');
+const mssql = require('mssql');
 
-// Configuramos los datos de acceso a PostgreSQL
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
+const config = {
+    user: 'sa', 
+    password: 'postgres', 
+    server: '127.0.0.1',
     database: 'gestorcitas',
-    password: 'Santiago2006',
-    port: 5432, // Puerto por defecto de PostgreSQL
-});
+    port: 1433,
+    options: {
+        trustServerCertificate: true,
+        trustedConnection: true // 
+    }
+};
 
-// Exportamos el pool para que los Repositorios puedan hacer consultas SQL
+
 module.exports = {
-    query: (text, params) => pool.query(text, params),
-    pool // Por si necesitas cerrar la conexión general más adelante
+    query: async (text, params = []) => {
+        try {
+            const pool = await mssql.connect(config);
+            const request = pool.request();
+            
+            if (params.length > 0) {
+                params.forEach((param, index) => {
+                    request.input((index + 1).toString(), param);
+                    // Se reemplaza $1 por @1, $2 por @2,etc.
+                    text = text.replace(`$${index + 1}`, `@${index + 1}`);
+                });
+            }
+            
+            const result = await request.query(text);
+            return { rows: result.recordset }; 
+        } catch (error) {
+            console.error("Error en la consulta SQL:", error);
+            throw error;
+        }
+    }
 };

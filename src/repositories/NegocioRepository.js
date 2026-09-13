@@ -9,7 +9,6 @@ const negocioRepository = {
         if (!negocio.telefono || !negocio.telefono.trim()) throw new Error("El telefono es obligatorio");
         if (!negocio.cantidadEmpleados || negocio.cantidadEmpleados <= 0) throw new Error("Cantidad de empleados invalida");
 
-        // Usamos los nombres exactos con guiones bajos de tu pgAdmin
         const sql = `INSERT INTO negocio(nombre, tipo_negocio, direccion, telefono, cantidad_empleados) VALUES ($1, $2, $3, $4, $5)`;
         const params = [negocio.nombre, negocio.tipoNegocio, negocio.direccion, negocio.telefono, negocio.cantidadEmpleados];
         await db.query(sql, params);

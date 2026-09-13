@@ -3,7 +3,6 @@ const router = express.Router();
 // Se llama directamente al servicio o repositorio más adelante
 const citaService = require('../repositories/CitaRepository'); 
 
-// 1. POST - Crear Cita
 router.post('/citas', async (req, res) => {
     try {
         const cita = req.body; // JavaScript ya lo transforma automáticamente a objeto
@@ -14,7 +13,6 @@ router.post('/citas', async (req, res) => {
     }
 });
 
-// 2. GET - Obitene r todas las citas o por ID (?idCita=2)
 router.get('/citas', async (req, res) => {
     try {
         const idCita = req.query.idCita; // Captura automáticamente el valor después del '='
@@ -31,7 +29,6 @@ router.get('/citas', async (req, res) => {
     }
 });
 
-// 3. PUT - Actualizar Cita
 router.put('/citas', async (req, res) => {
     try {
         const idCita = parseInt(req.query.idCita);
@@ -45,7 +42,6 @@ router.put('/citas', async (req, res) => {
     }
 });
 
-// 4. DELETE - Eliminar Cita
 router.delete('/citas', async (req, res) => {
     try {
         const idCita = parseInt(req.query.idCita);

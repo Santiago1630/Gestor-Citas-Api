@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const negocioService = require('../repositories/NegocioRepository');
 
-// 1. POST - Crear Negocio
 router.post('/negocios', async (req, res) => {
     try {
         const negocio = req.body;
@@ -13,7 +12,6 @@ router.post('/negocios', async (req, res) => {
     }
 });
 
-// 2. GET - Obtener todos o por ID (?idNegocio=2)
 router.get('/negocios', async (req, res) => {
     try {
         const idNegocio = req.query.idNegocio;
@@ -30,7 +28,6 @@ router.get('/negocios', async (req, res) => {
     }
 });
 
-// 3. PUT - Actualizar Negocio
 router.put('/negocios', async (req, res) => {
     try {
         const idNegocio = parseInt(req.query.idNegocio);
@@ -44,7 +41,6 @@ router.put('/negocios', async (req, res) => {
     }
 });
 
-// 4. DELETE - Eliminar Negocio
 router.delete('/negocios', async (req, res) => {
     try {
         const idNegocio = parseInt(req.query.idNegocio);
