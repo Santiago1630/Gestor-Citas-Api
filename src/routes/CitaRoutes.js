@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-// Se llama directamente al servicio o repositorio más adelante
+
 const citaService = require('../repositories/CitaRepository'); 
 
 router.post('/citas', async (req, res) => {
     try {
-        const cita = req.body; // JavaScript ya lo transforma automáticamente a objeto
+        const cita = req.body; 
         await citaService.crearCita(cita);
         res.status(201).json(cita);
     } catch (error) {
@@ -15,7 +15,7 @@ router.post('/citas', async (req, res) => {
 
 router.get('/citas', async (req, res) => {
     try {
-        const idCita = req.query.idCita; // Captura automáticamente el valor después del '='
+        const idCita = req.query.idCita; 
 
         if (!idCita) {
             const citas = await citaService.obtenerCitas();
