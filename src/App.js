@@ -4,8 +4,8 @@ const PORT = 8080;
 
 app.use(express.json());
 
-const citaRoutes = require('./routes/CitaRoutes');
-const negocioRoutes = require('./routes/NegocioRoutes');
+const citaRoutes = require('./controllers/CitaController');
+const negocioRoutes = require('./controllers/NegocioController');
 
 app.use('/api', citaRoutes);
 app.use('/api', negocioRoutes);
