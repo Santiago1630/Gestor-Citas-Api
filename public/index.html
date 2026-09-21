@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Negocios y Citas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Sistema de Agendamiento de Citas</h1>
+
+        <!-- Pestañas de Navegación -->
+        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="cliente-tab" data-bs-toggle="tab" data-bs-target="#cliente" type="button" role="tab">Vista Cliente (Agendar y Mis Citas)</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab" onclick="verificarAccesoAdmin()">Vista Administrador (Gestión)</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            
+            <!-- ================= VISTA CLIENTE ================= -->
+            <div class="tab-pane fade show active" id="cliente" role="tabpanel">
+                <div class="row">
+                    <!-- Formulario Agendar Cita -->
+                    <div class="col-md-6">
+                        <div class="card p-4 shadow-sm">
+                            <h3 class="mb-3">Pedir una Cita</h3>
+                            <form id="formCita">
+                                <div class="mb-3">
+                                    <label class="form-label">Seleccionar Negocio:</label>
+                                    <select class="form-select" id="selectNegocio" required></select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre del Cliente:</label>
+                                    <input type="text" class="form-control" id="nombreCliente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Teléfono:</label>
+                                    <input type="text" class="form-control" id="telefonoCliente" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tipo de Servicio:</label>
+                                    <input type="text" class="form-control" id="tipoServicio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha:</label>
+                                    <input type="date" class="form-control" id="fechaCita" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Hora:</label>
+                                    <input type="time" class="form-control" id="horaCita" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Agendar Cita</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Consultar Citas Privadas por Teléfono -->
+                    <div class="col-md-6">
+                        <div class="card p-4 shadow-sm">
+                            <h3 class="mb-3">Consultar Mis Citas</h3>
+                            <p class="text-muted small">Ingresa tu teléfono para ver únicamente tus citas agendadas de forma privada.</p>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="buscarTelefono" placeholder="Número de teléfono...">
+                                <button class="btn btn-outline-secondary" type="button" onclick="consultarMisCitas()">Buscar</button>
+                            </div>
+                            <ul class="list-group mt-3" id="listaMisCitas">
+                                <li class="list-group-item text-muted text-center">Realiza una búsqueda con tu teléfono</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= VISTA ADMINISTRADOR ================= -->
+            <div class="tab-pane fade" id="admin" role="tabpanel">
+                
+                        <!-- Pantalla de Login / Registro de Administrador / Dueño -->
+                <div id="seccionLoginAdmin" class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card p-4 shadow-sm">
+                            <h3 id="tituloLogin" class="mb-3 text-center">Acceso Administrador</h3>
+                            
+                            <!-- Formulario de Inicio de Sesión -->
+                            <form id="formLoginAdmin">
+                                <div class="mb-3">
+                                    <label class="form-label">Correo electrónico:</label>
+                                    <input type="email" class="form-control" id="correoAdmin" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contraseña:</label>
+                                    <input type="password" class="form-control" id="contrasenaAdmin" required>
+                                </div>
+                                <button type="submit" class="btn btn-dark w-100">Iniciar Sesión</button>
+                            </form>
+
+                            <!-- Formulario de Registro (Oculto por defecto) -->
+                            <form id="formRegistroAdmin" class="d-none">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre Completo:</label>
+                                    <input type="text" class="form-control" id="nombreRegistro" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Correo electrónico:</label>
+                                    <input type="email" class="form-control" id="correoRegistro" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Contraseña:</label>
+                                    <input type="password" class="form-control" id="contrasenaRegistro" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">Registrarse como Dueño</button>
+                            </form>
+
+                            <!-- Botón para alternar entre Login y Registro -->
+                            <div class="text-center mt-3">
+                                <a href="#" id="enlaceCambiarModo" onclick="alternarModoAuth(event)">¿No tienes cuenta? Regístrate aquí</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Panel de Gestión (Visible solo SI YA INICIÓ SESIÓN) -->
+                <div id="panelAdmin" class="row d-none">
+                    <div class="col-12 mb-3 d-flex justify-content-between align-items-center">
+                        <h4 class="text-success">Bienvenido, <span id="nombreAdminLogueado"></span></h4>
+                        <button class="btn btn-outline-danger btn-sm" onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
+                    </div>
+
+                    <!-- Formulario Crear/Editar Negocio -->
+                    <div class="col-md-6">
+                        <div class="card p-4 shadow-sm">
+                            <h3 id="tituloFormNegocio" class="mb-3">Crear Nuevo Negocio</h3>
+                            <form id="formNegocio">
+                                <input type="hidden" id="idNegocioEdit">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre del Negocio:</label>
+                                    <input type="text" class="form-control" id="nombreNegocio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tipo de Negocio:</label>
+                                    <input type="text" class="form-control" id="tipoNegocio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Dirección:</label>
+                                    <input type="text" class="form-control" id="direccionNegocio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Teléfono:</label>
+                                    <input type="text" class="form-control" id="telefonoNegocio" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Cantidad de Empleados:</label>
+                                    <input type="number" class="form-control" id="empleadosNegocio" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100" id="btnGuardarNegocio">Guardar Negocio</button>
+                                <button type="button" class="btn btn-secondary w-100 mt-2 d-none" id="btnCancelarEdicion" onclick="resetFormNegocio()">Cancelar Edición</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Negocios (CRUD) -->
+                    <div class="col-md-6">
+                        <div class="card p-4 shadow-sm">
+                            <h3 class="mb-3">Negocios Registrados (CRUD)</h3>
+                            <div class="table-responsive">
+                                <table class="table table-striped align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaNegociosAdmin">
+                                        <!-- Se llenará dinámicamente -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+
+        // Variable global para controlar si estamos editando una cita
+        let idCitaEditando = null;
+
+        // Cargar negocios públicos para el cliente
+        async function cargarNegociosPublicos() {
+            try {
+                const res = await fetch(`${API_URL}/negocios`);
+                const negocios = await res.json();
+                
+                const selectNegocio = document.getElementById('selectNegocio');
+                selectNegocio.innerHTML = '<option value="">Seleccione un negocio...</option>';
+                negocios.forEach(n => {
+                    selectNegocio.innerHTML += `<option value="${n.id_negocio}">${n.nombre} (${n.tipo_negocio})</option>`;
+                });
+            } catch (error) {
+                console.error("Error al cargar negocios:", error);
+            }
+        }
+
+        // Verificar si ya hay una sesión guardada en el navegador
+        function verificarAccesoAdmin() {
+            const adminLogueado = sessionStorage.getItem('adminLogueado');
+            if (adminLogueado) {
+                document.getElementById('seccionLoginAdmin').classList.add('d-none');
+                document.getElementById('panelAdmin').classList.remove('d-none');
+                document.getElementById('nombreAdminLogueado').innerText = adminLogueado;
+                cargarNegociosAdmin();
+            } else {
+                document.getElementById('seccionLoginAdmin').classList.remove('d-none');
+                document.getElementById('panelAdmin').classList.add('d-none');
+            }
+        }
+
+        // Manejar el envío del formulario de Login del Administrador
+        document.getElementById('formLoginAdmin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const correo = document.getElementById('correoAdmin').value;
+            const contrasena = document.getElementById('contrasenaAdmin').value;
+
+            try {
+                const res = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ correo, contrasena })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    if (data.rol === 'administrador') {
+                        sessionStorage.setItem('adminLogueado', data.nombre);
+                        verificarAccesoAdmin();
+                    } else {
+                        alert('No tienes permisos de administrador');
+                    }
+                } else {
+                    alert(data.error || 'Correo o contraseña incorrectos');
+                }
+            } catch (error) {
+                console.error("Error en el login:", error);
+                alert('Error al conectar con el servidor');
+            }
+        });
+
+        function cerrarSesionAdmin() {
+            sessionStorage.removeItem('adminLogueado');
+            document.getElementById('formLoginAdmin').reset();
+            verificarAccesoAdmin();
+        }
+
+        async function cargarNegociosAdmin() {
+            try {
+                const res = await fetch(`${API_URL}/negocios`);
+                const negocios = await res.json();
+                
+                const tabla = document.getElementById('tablaNegociosAdmin');
+                tabla.innerHTML = '';
+                negocios.forEach(n => {
+                    tabla.innerHTML += `
+                        <tr>
+                            <td><strong>${n.nombre}</strong><br><small class="text-muted">${n.direccion}</small></td>
+                            <td>${n.tipo_negocio}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning mb-1" onclick='prepararEditarNegocio(${JSON.stringify(n)})'>Editar</button>
+                                <button class="btn btn-sm btn-danger mb-1" onclick="eliminarNegocio(${n.id_negocio})">Eliminar</button>
+                            </td>
+                        </tr>`;
+                });
+            } catch (error) {
+                console.error("Error al cargar administración de negocios:", error);
+            }
+        }
+
+                let modoRegistro = false;
+
+        function alternarModoAuth(e) {
+            e.preventDefault();
+            modoRegistro = !modoRegistro;
+            
+            const titulo = document.getElementById('tituloLogin');
+            const formLogin = document.getElementById('formLoginAdmin');
+            const formRegistro = document.getElementById('formRegistroAdmin');
+            const enlace = document.getElementById('enlaceCambiarModo');
+
+            if (modoRegistro) {
+                titulo.innerText = "Crear Cuenta de Dueño";
+                formLogin.classList.add('d-none');
+                formRegistro.classList.remove('d-none');
+                enlace.innerText = "¿Ya tienes cuenta? Inicia sesión";
+            } else {
+                titulo.innerText = "Acceso Administrador";
+                formLogin.classList.remove('d-none');
+                formRegistro.classList.add('d-none');
+                enlace.innerText = "¿No tienes cuenta? Regístrate aquí";
+            }
+        }
+
+        // Manejar el Registro de un nuevo Dueño
+        document.getElementById('formRegistroAdmin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('nombreRegistro').value;
+            const correo = document.getElementById('correoRegistro').value;
+            const contrasena = document.getElementById('contrasenaRegistro').value;
+
+            try {
+                const res = await fetch(`${API_URL}/registro`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, correo, contrasena })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert('¡Cuenta creada con éxito! Ahora inicia sesión.');
+                    document.getElementById('formRegistroAdmin').reset();
+                    alternarModoAuth(e); // Devuelve al usuario al formulario de login
+                } else {
+                    alert(data.error || 'No se pudo registrar la cuenta');
+                }
+            } catch (error) {
+                console.error("Error en el registro:", error);
+                alert('Error al conectar con el servidor');
+            }
+        });
+        // Crear o Actualizar Negocio (POST / PUT)
+        document.getElementById('formNegocio').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('idNegocioEdit').value;
+            const negocioData = {
+                nombre: document.getElementById('nombreNegocio').value,
+                tipoNegocio: document.getElementById('tipoNegocio').value,
+                direccion: document.getElementById('direccionNegocio').value,
+                telefono: document.getElementById('telefonoNegocio').value,
+                cantidadEmpleados: parseInt(document.getElementById('empleadosNegocio').value)
+            };
+
+            let res;
+            if (id) {
+                res = await fetch(`${API_URL}/negocios?idNegocio=${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(negocioData)
+                });
+            } else {
+                res = await fetch(`${API_URL}/negocios`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(negocioData)
+                });
+            }
+
+            if (res.ok) {
+                alert(id ? 'Negocio actualizado correctamente' : 'Negocio creado con éxito');
+                resetFormNegocio();
+                cargarNegociosPublicos();
+                cargarNegociosAdmin();
+            } else {
+                alert('Ocurrió un error al procesar la solicitud');
+            }
+        });
+
+        function prepararEditarNegocio(n) {
+            document.getElementById('idNegocioEdit').value = n.id_negocio;
+            document.getElementById('nombreNegocio').value = n.nombre;
+            document.getElementById('tipoNegocio').value = n.tipo_negocio;
+            document.getElementById('direccionNegocio').value = n.direccion;
+            document.getElementById('telefonoNegocio').value = n.telefono;
+            document.getElementById('empleadosNegocio').value = n.cantidad_empleados;
+            
+            document.getElementById('tituloFormNegocio').innerText = 'Editar Negocio';
+            document.getElementById('btnGuardarNegocio').innerText = 'Actualizar Negocio';
+            document.getElementById('btnGuardarNegocio').className = 'btn btn-warning w-100';
+            document.getElementById('btnCancelarEdicion').classList.remove('d-none');
+        }
+
+        function resetFormNegocio() {
+            document.getElementById('formNegocio').reset();
+            document.getElementById('idNegocioEdit').value = '';
+            document.getElementById('tituloFormNegocio').innerText = 'Crear Nuevo Negocio';
+            document.getElementById('btnGuardarNegocio').innerText = 'Guardar Negocio';
+            document.getElementById('btnGuardarNegocio').className = 'btn btn-success w-100';
+            document.getElementById('btnCancelarEdicion').classList.add('d-none');
+        }
+
+        async function eliminarNegocio(id) {
+            if (confirm('¿Estás seguro de eliminar este negocio?')) {
+                const res = await fetch(`${API_URL}/negocios?idNegocio=${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    alert('Negocio eliminado');
+                    cargarNegociosPublicos();
+                    cargarNegociosAdmin();
+                } else {
+                    alert('No se pudo eliminar el negocio (puede que tenga citas asociadas)');
+                }
+            }
+        }
+
+        // ================= CREAR O ACTUALIZAR CITA =================
+        document.getElementById('formCita').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const citaData = {
+                idNegocio: parseInt(document.getElementById('selectNegocio').value),
+                nombreCliente: document.getElementById('nombreCliente').value,
+                telefono: document.getElementById('telefonoCliente').value,
+                tipoServicio: document.getElementById('tipoServicio').value,
+                fecha: document.getElementById('fechaCita').value,
+                hora: document.getElementById('horaCita').value,
+                estado: "Pendiente"
+            };
+
+            let res;
+            if (idCitaEditando) {
+                // Si hay una cita en edición, usamos PUT
+                res = await fetch(`${API_URL}/citas?idCita=${idCitaEditando}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(citaData)
+                });
+            } else {
+                // Si no, es una nueva cita (POST)
+                res = await fetch(`${API_URL}/citas`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(citaData)
+                });
+            }
+
+            if (res.ok) {
+                alert(idCitaEditando ? '¡Cita actualizada con éxito!' : '¡Cita agendada con éxito!');
+                
+                const telConsultado = citaData.telefono;
+                document.getElementById('formCita').reset();
+                idCitaEditando = null; // Reiniciamos el estado de edición
+                
+                // Actualizamos la vista de búsqueda con el teléfono
+                document.getElementById('buscarTelefono').value = telConsultado;
+                consultarMisCitas();
+            } else {
+                alert('Error al procesar la cita');
+            }
+        });
+
+        // Consultar citas privadas por teléfono
+        async function consultarMisCitas() {
+            const telefono = document.getElementById('buscarTelefono').value.trim();
+            const lista = document.getElementById('listaMisCitas');
+            
+            if (!telefono) {
+                lista.innerHTML = '<li class="list-group-item text-danger text-center">Ingresa un número de teléfono válido</li>';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/citas`);
+                const todasLasCitas = await res.json();
+                const misCitas = todasLasCitas.filter(c => c.telefono === telefono);
+
+                lista.innerHTML = '';
+                if (misCitas.length === 0) {
+                    lista.innerHTML = '<li class="list-group-item text-muted text-center">No se encontraron citas para este teléfono</li>';
+                    return;
+                }
+
+                misCitas.forEach(c => {
+                    lista.innerHTML += `
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>Servicio:</strong> ${c.tipo_servicio}<br>
+                                <small class="text-muted">Fecha: ${c.fecha} a las ${c.hora} (${c.estado})</small>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-warning me-1" onclick='prepararEditarCita(${JSON.stringify(c)})'>Editar</button>
+                                <button class="btn btn-sm btn-danger" onclick="eliminarCita(${c.id_cita}, '${telefono}')">Cancelar</button>
+                            </div>
+                        </li>`;
+                });
+            } catch (error) {
+                console.error("Error al consultar citas:", error);
+            }
+        }
+
+        // Cargar datos de la cita en el formulario para editarlos
+        function prepararEditarCita(c) {
+            idCitaEditando = c.id_cita;
+            document.getElementById('selectNegocio').value = c.id_negocio;
+            document.getElementById('nombreCliente').value = c.nombre_cliente;
+            document.getElementById('telefonoCliente').value = c.telefono;
+            document.getElementById('tipoServicio').value = c.tipo_servicio;
+            document.getElementById('fechaCita').value = c.fecha;
+            document.getElementById('horaCita').value = c.hora;
+            
+            alert("Los datos de la cita se han cargado en el formulario de la izquierda. Modifícalos y haz clic en agendar para guardar los cambios.");
+        }
+
+        async function eliminarCita(idCita, telefono) {
+            if (confirm('¿Deseas cancelar esta cita?')) {
+                const res = await fetch(`${API_URL}/citas?idCita=${idCita}`, { method: 'DELETE' });
+                if (res.ok) {
+                    alert('Cita cancelada');
+                    document.getElementById('buscarTelefono').value = telefono;
+                    consultarMisCitas();
+                } else {
+                    alert('Error al cancelar la cita');
+                }
+            }
+        }
+
+        // Cargar datos iniciales
+        cargarNegociosPublicos();
+    </script>
+</body>
+</html>

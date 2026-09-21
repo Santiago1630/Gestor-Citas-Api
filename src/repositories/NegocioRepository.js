@@ -3,50 +3,122 @@ const db = require('../config/database');
 const negocioRepository = {
 
     async crearNegocio(negocio) {
+        if (!negocio.idUsuario) throw new Error("El usuario dueño es obligatorio");
         if (!negocio.nombre || !negocio.nombre.trim()) throw new Error("El nombre es obligatorio");
         if (!negocio.tipoNegocio || !negocio.tipoNegocio.trim()) throw new Error("El tipo de negocio es obligatorio");
         if (!negocio.direccion || !negocio.direccion.trim()) throw new Error("La direccion es obligatoria");
         if (!negocio.telefono || !negocio.telefono.trim()) throw new Error("El telefono es obligatorio");
-        if (!negocio.cantidadEmpleados || negocio.cantidadEmpleados <= 0) throw new Error("Cantidad de empleados invalida");
+        if (!negocio.cantidadEmpleados || negocio.cantidadEmpleados <= 0) {
+            throw new Error("Cantidad de empleados invalida");
+        }
 
-        const sql = `INSERT INTO negocio(nombre, tipo_negocio, direccion, telefono, cantidad_empleados) VALUES ($1, $2, $3, $4, $5)`;
-        const params = [negocio.nombre, negocio.tipoNegocio, negocio.direccion, negocio.telefono, negocio.cantidadEmpleados];
+        const sql = `
+            INSERT INTO negocio
+            (nombre, tipo_negocio, direccion, telefono, cantidad_empleados, id_usuario)
+            VALUES ($1, $2, $3, $4, $5, $6)
+        `;
+
+        const params = [
+            negocio.nombre.trim(),
+            negocio.tipoNegocio.trim(),
+            negocio.direccion.trim(),
+            negocio.telefono.trim(),
+            negocio.cantidadEmpleados,
+            negocio.idUsuario
+        ];
+
         await db.query(sql, params);
     },
 
+    // Se mantiene para que el cliente pueda ver los negocios disponibles.
     async obtenerNegocios() {
         const sql = "SELECT * FROM negocio ORDER BY id_negocio ASC";
         const resultado = await db.query(sql);
         return resultado.rows;
     },
 
+    // Negocios pertenecientes a un dueño específico.
+    async obtenerNegociosPorUsuario(idUsuario) {
+        const sql = `
+            SELECT *
+            FROM negocio
+            WHERE id_usuario = $1
+            ORDER BY id_negocio ASC
+        `;
+        const resultado = await db.query(sql, [idUsuario]);
+        return resultado.rows;
+    },
+
     async obtenerNegocioPorId(idNegocio) {
         const sql = "SELECT * FROM negocio WHERE id_negocio = $1";
         const resultado = await db.query(sql, [idNegocio]);
-        
+
         if (resultado.rows.length === 0) {
-            return null; 
+            return null;
         }
-        return resultado.rows;
+
+        return resultado.rows[0];
+    },
+
+    async obtenerNegocioPorIdYUsuario(idNegocio, idUsuario) {
+        const sql = `
+            SELECT *
+            FROM negocio
+            WHERE id_negocio = $1 AND id_usuario = $2
+        `;
+        const resultado = await db.query(sql, [idNegocio, idUsuario]);
+        return resultado.rows[0] || null;
     },
 
     async actualizarNegocio(negocio) {
         if (!negocio.idNegocio) throw new Error("El id es obligatorio");
-        
-        const existe = await this.obtenerNegocioPorId(negocio.idNegocio);
-        if (!existe) throw new Error("No existe el negocio");
+        if (!negocio.idUsuario) throw new Error("El usuario dueño es obligatorio");
 
-        const sql = `UPDATE negocio SET nombre=$1, tipo_negocio=$2, direccion=$3, telefono=$4, cantidad_empleados=$5 WHERE id_negocio=$6`;
-        const params = [negocio.nombre, negocio.tipoNegocio, negocio.direccion, negocio.telefono, negocio.cantidadEmpleados, negocio.idNegocio];
+        const existe = await this.obtenerNegocioPorIdYUsuario(
+            negocio.idNegocio,
+            negocio.idUsuario
+        );
+
+        if (!existe) {
+            throw new Error("No existe el negocio o no pertenece al usuario");
+        }
+
+        const sql = `
+            UPDATE negocio
+            SET nombre=$1,
+                tipo_negocio=$2,
+                direccion=$3,
+                telefono=$4,
+                cantidad_empleados=$5
+            WHERE id_negocio=$6 AND id_usuario=$7
+        `;
+
+        const params = [
+            negocio.nombre.trim(),
+            negocio.tipoNegocio.trim(),
+            negocio.direccion.trim(),
+            negocio.telefono.trim(),
+            negocio.cantidadEmpleados,
+            negocio.idNegocio,
+            negocio.idUsuario
+        ];
+
         await db.query(sql, params);
     },
 
-    async eliminarNegocio(idNegocio) {
-        const existe = await this.obtenerNegocioPorId(idNegocio);
-        if (!existe) throw new Error("No existe el negocio");
+    async eliminarNegocio(idNegocio, idUsuario) {
+        const existe = await this.obtenerNegocioPorIdYUsuario(idNegocio, idUsuario);
 
-        const sql = "DELETE FROM negocio WHERE id_negocio = $1";
-        await db.query(sql, [idNegocio]);
+        if (!existe) {
+            throw new Error("No existe el negocio o no pertenece al usuario");
+        }
+
+        const sql = `
+            DELETE FROM negocio
+            WHERE id_negocio = $1 AND id_usuario = $2
+        `;
+
+        await db.query(sql, [idNegocio, idUsuario]);
     }
 };
 

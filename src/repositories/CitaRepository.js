@@ -27,19 +27,25 @@ const citaRepository = {
         return resultado.rows;
     },
 
-    async obtenerCitaPorId(idCita) {
+  async obtenerCitaPorId(idCita) {
         const sql = "SELECT * FROM citas WHERE id_cita = $1";
         const resultado = await db.query(sql, [idCita]);
         
         if (resultado.rows.length === 0) {
             throw new Error("No existe la cita");
         }
-        return resultado.rows;
+        return resultado.rows[0]; // <-- Cambiado de resultado.rows a resultado.rows[0]
     },
 
     async obtenerCitasPorNegocio(idNegocio) {
         const sql = "SELECT * FROM citas WHERE id_negocio = $1";
         const resultado = await db.query(sql, [idNegocio]);
+        return resultado.rows;
+    },
+
+    async obtenerCitasPorTelefono(telefono) {
+        const sql = "SELECT * FROM citas WHERE telefono = $1";
+        const resultado = await db.query(sql, [telefono]);
         return resultado.rows;
     },
 

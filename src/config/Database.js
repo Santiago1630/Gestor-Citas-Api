@@ -8,10 +8,9 @@ const config = {
     port: 1433,
     options: {
         trustServerCertificate: true,
-        trustedConnection: true // 
+        trustedConnection: true
     }
 };
-
 
 module.exports = {
     query: async (text, params = []) => {
@@ -21,9 +20,12 @@ module.exports = {
             
             if (params.length > 0) {
                 params.forEach((param, index) => {
-                    request.input((index + 1).toString(), param);
-                    // Se reemplaza $1 por @1, $2 por @2,etc.
-                    text = text.replace(`$${index + 1}`, `@${index + 1}`);
+                    const paramName = `p${index + 1}`; // Usar un prefijo como p1, p2
+                    request.input(paramName, param);
+                   
+                    // Reemplazar todas las apariciones de $1, $2, etc., usando una expresión regular global
+                    const regex = new RegExp(`\\$${index + 1}`, 'g');
+                    text = text.replace(regex, `@${paramName}`);
                 });
             }
             

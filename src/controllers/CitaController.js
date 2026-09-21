@@ -15,14 +15,17 @@ router.post('/citas', async (req, res) => {
 
 router.get('/citas', async (req, res) => {
     try {
-        const idCita = req.query.idCita; 
+        const { idCita, telefono } = req.query; 
 
-        if (!idCita) {
-            const citas = await citaService.obtenerCitas();
-            return res.status(200).json(citas);
-        } else {
+        if (idCita) {
             const cita = await citaService.obtenerCitaPorId(parseInt(idCita));
             return res.status(200).json(cita);
+        } else if (telefono) {
+            const citas = await citaService.obtenerCitasPorTelefono(telefono);
+            return res.status(200).json(citas);
+        } else {
+            const citas = await citaService.obtenerCitas();
+            return res.status(200).json(citas);
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
