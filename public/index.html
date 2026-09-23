@@ -11,7 +11,7 @@
     <div class="container my-5">
         <h1 class="text-center mb-4">Sistema de Agendamiento de Citas</h1>
 
-        // Pestaña de navegacion
+        <!--Pestaña de navegacion -->
         <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="cliente-tab" data-bs-toggle="tab" data-bs-target="#cliente" type="button" role="tab">Vista Cliente (Agendar y Mis Citas)</button>
@@ -23,10 +23,10 @@
 
         <div class="tab-content" id="myTabContent">
             
-            //Vista cliente
+            <!--Vista cliente-->
             <div class="tab-pane fade show active" id="cliente" role="tabpanel">
                 <div class="row">
-                    // Formulario para agendar cita
+                    <!--Formulario para agendar cita-->
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 class="mb-3">Pedir una Cita</h3>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
 
-                    // Consultar citas por telefono
+                    <!--Consultar citas por telefono-->
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 class="mb-3">Consultar Mis Citas</h3>
@@ -77,16 +77,16 @@
                 </div>
             </div>
 
-            //Vista de administrador de negocios
+            <!--Vista de administrador de negocios-->
             <div class="tab-pane fade" id="admin" role="tabpanel">
                 
-                        //Pantalla de Login, Registro de Administrador. Dueño
+                        <!--Pantalla de Login, Registro de Administrador. Dueño-->
                 <div id="seccionLoginAdmin" class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 id="tituloLogin" class="mb-3 text-center">Acceso Administrador</h3>
                             
-                            //Formulario de Inicio de Sesion
+                            <!--Formulario de Inicio de Sesion-->
                             <form id="formLoginAdmin">
                                 <div class="mb-3">
                                     <label class="form-label">Correo electrónico:</label>
@@ -99,7 +99,7 @@
                                 <button type="submit" class="btn btn-dark w-100">Iniciar Sesión</button>
                             </form>
 
-                            // Formulario para registrar nueva cuenta, esta un poco oculto
+                            <!--Formulario para registrar nueva cuenta, esta un poco oculto-->
                             <form id="formRegistroAdmin" class="d-none">
                                 <div class="mb-3">
                                     <label class="form-label">Nombre Completo:</label>
@@ -116,7 +116,7 @@
                                 <button type="submit" class="btn btn-success w-100">Registrarse como Dueño</button>
                             </form>
 
-                            //Boton para cambiar entre login y registro
+                            <!--Boton para cambiar entre login y registro-->
                             <div class="text-center mt-3">
                                 <a href="#" id="enlaceCambiarModo" onclick="alternarModoAuth(event)">¿No tienes cuenta? Regístrate aquí</a>
                             </div>
@@ -124,14 +124,14 @@
                     </div>
                 </div>
 
-                // Panel de gestion si ya inicie sesion
+                <!--Panel de gestion si ya inicie sesion-->
                 <div id="panelAdmin" class="row d-none">
                     <div class="col-12 mb-3 d-flex justify-content-between align-items-center">
                         <h4 class="text-success">Bienvenido, <span id="nombreAdminLogueado"></span></h4>
                         <button class="btn btn-outline-danger btn-sm" onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
                     </div>
 
-                    // Formulario para crear y editar usuario
+                    <!--Formulario para crear y editar usuario-->
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 id="tituloFormNegocio" class="mb-3">Crear Nuevo Negocio</h3>
@@ -163,7 +163,7 @@
                         </div>
                     </div>
 
-                    // Lista de Negocios
+                    <!--Lista de Negocios-->
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 class="mb-3">Negocios Registrados (CRUD)</h3>
@@ -194,10 +194,10 @@
     <script>
         const API_URL = 'http://localhost:8080/api';
 
-        // Variable global para controlar si estamos editando una cita
+        <!--Variable global para controlar si estamos editando una cita-->
         let idCitaEditando = null;
 
-        // Cargar negocios públicos para el cliente
+        <!--Cargar negocios públicos para el cliente-->
         async function cargarNegociosPublicos() {
             try {
                 const res = await fetch(`${API_URL}/negocios`);
@@ -213,7 +213,7 @@
             }
         }
 
-        // Verificar si ya hay una sesión guardada en el navegador
+        <!--Verificar si ya hay una sesión guardada en el navegador-->
         function verificarAccesoAdmin() {
             const adminLogueado = sessionStorage.getItem('adminLogueado');
             if (adminLogueado) {
@@ -227,7 +227,7 @@
             }
         }
 
-        // Manejar el envío del formulario de Login del Administrador
+        <!--Manejar el envío del formulario de Login del Administrador-->
         document.getElementById('formLoginAdmin').addEventListener('submit', async (e) => {
             e.preventDefault();
             const correo = document.getElementById('correoAdmin').value;
@@ -311,7 +311,7 @@
             }
         }
 
-        // Manejar el Registro de un nuevo Dueño
+        <!--Manejar el Registro de un nuevo Dueño-->
         document.getElementById('formRegistroAdmin').addEventListener('submit', async (e) => {
             e.preventDefault();
             const nombre = document.getElementById('nombreRegistro').value;
@@ -339,7 +339,7 @@
                 alert('Error al conectar con el servidor');
             }
         });
-        // Crear o Actualizar Negocio (POST / PUT)
+        <!--Crear o Actualizar Negocio (POST / PUT)-->
         document.getElementById('formNegocio').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('idNegocioEdit').value;
@@ -412,7 +412,7 @@
             }
         }
 
-        // ================= CREAR O ACTUALIZAR CITA =================
+        <!--CREAR O ACTUALIZAR CITA-->
         document.getElementById('formCita').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -428,14 +428,14 @@
 
             let res;
             if (idCitaEditando) {
-                // Si hay una cita en edición, usamos PUT
+                <!--Si hay una cita en edición, usamos PUT-->
                 res = await fetch(`${API_URL}/citas?idCita=${idCitaEditando}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(citaData)
                 });
             } else {
-                // Si no, es una nueva cita (POST)
+                <!--Si no, es una nueva cita POST-->
                 res = await fetch(`${API_URL}/citas`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -450,7 +450,7 @@
                 document.getElementById('formCita').reset();
                 idCitaEditando = null; // Reiniciamos el estado de edición
                 
-                // Actualizamos la vista de búsqueda con el teléfono
+                <!--Actualizamos la vista de búsqueda con el teléfono-->
                 document.getElementById('buscarTelefono').value = telConsultado;
                 consultarMisCitas();
             } else {
@@ -458,7 +458,7 @@
             }
         });
 
-        // Consultar citas privadas por teléfono
+        <!--Consultar citas privadas por teléfono-->
         async function consultarMisCitas() {
             const telefono = document.getElementById('buscarTelefono').value.trim();
             const lista = document.getElementById('listaMisCitas');
@@ -497,7 +497,7 @@
             }
         }
 
-        // Cargar datos de la cita en el formulario para editarlos
+        <!--Cargar datos de la cita en el formulario para editarlos-->
         function prepararEditarCita(c) {
             idCitaEditando = c.id_cita;
             document.getElementById('selectNegocio').value = c.id_negocio;
@@ -523,7 +523,7 @@
             }
         }
 
-        // Cargar datos iniciales
+        <!--Cargar datos iniciales-->
         cargarNegociosPublicos();
     </script>
 </body>
