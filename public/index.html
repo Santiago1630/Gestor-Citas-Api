@@ -11,7 +11,7 @@
     <div class="container my-5">
         <h1 class="text-center mb-4">Sistema de Agendamiento de Citas</h1>
 
-        <!-- Pestañas de Navegación -->
+        // Pestaña de navegacion
         <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="cliente-tab" data-bs-toggle="tab" data-bs-target="#cliente" type="button" role="tab">Vista Cliente (Agendar y Mis Citas)</button>
@@ -23,10 +23,10 @@
 
         <div class="tab-content" id="myTabContent">
             
-            <!-- ================= VISTA CLIENTE ================= -->
+            //Vista cliente
             <div class="tab-pane fade show active" id="cliente" role="tabpanel">
                 <div class="row">
-                    <!-- Formulario Agendar Cita -->
+                    // Formulario para agendar cita
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 class="mb-3">Pedir una Cita</h3>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
 
-                    <!-- Consultar Citas Privadas por Teléfono -->
+                    // Consultar citas por telefono
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 class="mb-3">Consultar Mis Citas</h3>
@@ -77,16 +77,16 @@
                 </div>
             </div>
 
-            <!-- ================= VISTA ADMINISTRADOR ================= -->
+            //Vista de administrador de negocios
             <div class="tab-pane fade" id="admin" role="tabpanel">
                 
-                        <!-- Pantalla de Login / Registro de Administrador / Dueño -->
+                        //Pantalla de Login, Registro de Administrador. Dueño
                 <div id="seccionLoginAdmin" class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 id="tituloLogin" class="mb-3 text-center">Acceso Administrador</h3>
                             
-                            <!-- Formulario de Inicio de Sesión -->
+                            //Formulario de Inicio de Sesion
                             <form id="formLoginAdmin">
                                 <div class="mb-3">
                                     <label class="form-label">Correo electrónico:</label>
@@ -99,7 +99,7 @@
                                 <button type="submit" class="btn btn-dark w-100">Iniciar Sesión</button>
                             </form>
 
-                            <!-- Formulario de Registro (Oculto por defecto) -->
+                            // Formulario para registrar nueva cuenta, esta un poco oculto
                             <form id="formRegistroAdmin" class="d-none">
                                 <div class="mb-3">
                                     <label class="form-label">Nombre Completo:</label>
@@ -116,7 +116,7 @@
                                 <button type="submit" class="btn btn-success w-100">Registrarse como Dueño</button>
                             </form>
 
-                            <!-- Botón para alternar entre Login y Registro -->
+                            //Boton para cambiar entre login y registro
                             <div class="text-center mt-3">
                                 <a href="#" id="enlaceCambiarModo" onclick="alternarModoAuth(event)">¿No tienes cuenta? Regístrate aquí</a>
                             </div>
@@ -124,14 +124,14 @@
                     </div>
                 </div>
 
-                <!-- 2. Panel de Gestión (Visible solo SI YA INICIÓ SESIÓN) -->
+                // Panel de gestion si ya inicie sesion
                 <div id="panelAdmin" class="row d-none">
                     <div class="col-12 mb-3 d-flex justify-content-between align-items-center">
                         <h4 class="text-success">Bienvenido, <span id="nombreAdminLogueado"></span></h4>
                         <button class="btn btn-outline-danger btn-sm" onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
                     </div>
 
-                    <!-- Formulario Crear/Editar Negocio -->
+                    // Formulario para crear y editar usuario
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 id="tituloFormNegocio" class="mb-3">Crear Nuevo Negocio</h3>
@@ -163,7 +163,7 @@
                         </div>
                     </div>
 
-                    <!-- Lista de Negocios (CRUD) -->
+                    // Lista de Negocios
                     <div class="col-md-6">
                         <div class="card p-4 shadow-sm">
                             <h3 class="mb-3">Negocios Registrados (CRUD)</h3>
@@ -177,7 +177,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tablaNegociosAdmin">
-                                        <!-- Se llenará dinámicamente -->
+                                        // Se llenara en una forma dinamica y expansiva
                                     </tbody>
                                 </table>
                             </div>
@@ -231,7 +231,7 @@
         document.getElementById('formLoginAdmin').addEventListener('submit', async (e) => {
             e.preventDefault();
             const correo = document.getElementById('correoAdmin').value;
-            const contrasena = document.getElementById('contrasenaAdmin').value;
+            const contrasena = document.getElementById('contraseñaAdmin').value;
 
             try {
                 const res = await fetch(`${API_URL}/login`, {
