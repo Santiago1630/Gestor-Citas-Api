@@ -7,7 +7,6 @@ const config = {
     database: 'gestorcitas',
     port: 1433,
     options: {
-        trustServerCertificate: true,
         trustedConnection: true
     }
 };
